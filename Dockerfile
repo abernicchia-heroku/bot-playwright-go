@@ -24,19 +24,19 @@ USER root
 RUN apt-get update \
     && apt-get install -y ca-certificates tzdata
 
-RUN useradd -m -d /app docker
+RUN useradd -m -d /app dyno && mkdir -p /app
 
 COPY --from=builder /go/bin/playwright /bin/bot-playwright-go /app/
 
-RUN chown -R docker:docker /app
+RUN chown -R dyno:dyno /app
 
 # Install playwright dependencies as root (required)
 RUN /app/playwright install-deps && rm -rf /var/lib/apt/lists/*
 
-USER docker
+USER dyno
 
 # Install playwright browsers (in this case only Firefox is required, removing this it will install all the default browsers). 
-# It will install under /app/.cache (user home dir) and can be executed by non-root user (docker)
+# It will install under /app/.cache (user home dir) and can be executed by non-root user (dyno)
 RUN /app/playwright install firefox
 
 CMD ["/app/bot-playwright-go"]
