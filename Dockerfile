@@ -39,4 +39,6 @@ USER dyno
 # It will install under /app/.cache (user home dir) and can be executed by non-root user (dyno)
 RUN /app/playwright install firefox
 
-CMD ["/app/bot-playwright-go"]
+# "HOME=/app" is required as the non-root user on Heroku using docker is / (see below), but when "playwright install firefox" is executed it installs under /app/.cache as the HOME dir is taken from the user account "useradd -m -d /app"
+# u14716:x:14716:14716:,,,:/:/bin/bash
+CMD ["HOME=/app /app/bot-playwright-go"]
