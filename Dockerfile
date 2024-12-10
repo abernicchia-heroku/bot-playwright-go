@@ -35,7 +35,8 @@ RUN /app/playwright install-deps && rm -rf /var/lib/apt/lists/*
 
 USER docker
 
-# Install playwright browsers (in this case only Firefox is required, removing this it will install all the default browsers). It will install under /app/.cache (user home dir) and can be executed by non-root user (docker)
+# Install playwright browsers (in this case only Firefox is required, removing this it will install all the default browsers). 
+# It will install under /app/.cache (user home dir) and can be executed by non-root user (docker)
 RUN /app/playwright install firefox
 
 CMD ["/app/bot-playwright-go"]
