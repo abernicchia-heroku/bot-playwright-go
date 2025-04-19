@@ -30,7 +30,7 @@ const TeslaModel3InventorySiteUrlEnv string = "BPG_TESLA_M3_INVENTORY_SITEURL"
 const TeslaModel3InventorySiteUrlDefault string = "https://www.tesla.com/it_IT/inventory/new/m3?arrangeby=plh&zip=20161&range=0"
 
 const InventoryArticlesXpathEnv string = "BPG_INVENTORY_ARTICLES_XPATH"
-const InventoryArticlesXpathDefault string = "//html/body/div[1]/div/div[1]/main/div/article"
+const InventoryArticlesXpathDefault string = "/html/body/div[1]/div/div[2]/main/div/article[1]"
 
 const ReferenceModelYPriceEnv string = "BPG_MODELY_REFERENCE_PRICE"
 const ReferenceModelYPriceDefault string = "36500"
@@ -197,6 +197,11 @@ func scrapeCarModelPriceEntry(htmldoc *html.Node, xpath string) carModelPriceEnt
 	firstArticle, err := htmlquery.Query(htmldoc, xpath)
 	if err != nil {
 		fmt.Printf("[main.go:bot-playwright-go] could not find html node: %v\n", err)
+	}
+
+	if firstArticle == nil {
+		fmt.Printf("[main.go:bot-playwright-go] could not find html node %s\n", xpath)
+		panic("xpath not found, check if the source page was modified")
 	}
 
 	if isEnvGreaterThan(DebugEnv, 1000) {
