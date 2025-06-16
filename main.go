@@ -208,13 +208,26 @@ func scrapeCarModelPriceEntry(htmldoc *html.Node, xpath string) carModelPriceEnt
 		fmt.Printf("First article: %v\n", htmlquery.InnerText(firstArticle))
 	}
 
+	// previous:
 	// <span class="result-purchase-price tds-text--h4">39.545&nbsp;€</span>
 	// /html/body/div[1]/div/div[1]/main/div/article[1]/section[1]/div[2]/div[1]/div/span[1]
+	// //section[1]/div[2]/div[1]/div/span[1]
 
-	articlePrice, err := htmlquery.Query(firstArticle, "//section[1]/div[2]/div[1]/div/span[1]")
+	// new on mid-May 2025:
+	// <span class="tds-text--medium tds-text--contrast-high"><span>47.894&nbsp;€</span></span>
+	//   <span>47.894&nbsp;€</span>
+	// //section/div[2]/span/div/span[1]/span
+
+	articlePrice, err := htmlquery.Query(firstArticle, "//section/div[2]/span/div/span[1]/span")
 	if err != nil {
 		fmt.Printf("[main.go:bot-playwright-go] could not find html node: %v\n", err)
 	}
+
+	//*[@id="iso-container"]/div/div[2]/main/div/article[1]/button/article/div[2]/section/div[2]/span/div/span[1]/span
+	//*[@id="iso-container"]/div/div[2]/main/div/article[1]/button/article/div[2]/section/div[2]/span/div/span[1]/span
+	//*[@id="iso-container"]/div/div[2]/main/div/article[1]/button/article/div[2]
+
+	//*[@id="iso-container"]/div/div[2]/main/div/article[1]/button/article/div[2]/section/div[2]/span/div
 
 	if isEnvGreaterThan(DebugEnv, 1000) {
 		fmt.Printf("Price: %v\n", htmlquery.InnerText(articlePrice))
